@@ -1,26 +1,76 @@
 # Statistical Rethinking Chapter 3 problems
 
-__Name:__
+__Name:_Sharon Gray_
 
 ## 3E1
-
+```{r}
+p_grid <- seq( from=0 , to=1 , length.out=1000 ) 
+prior <- rep( 1 , 1000 ) 
+likelihood <- dbinom( 6 , size=9 , prob=p_grid ) 
+posterior <- likelihood * prior 
+posterior <- posterior / sum(posterior) 
+set.seed(100) 
+samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE )
+sum( samples < 0.2 ) / 1e4 #How much posterior prob lies below p=0.2?
+```
 ## 3E2
-
+```{r}
+p_grid <- seq( from=0 , to=1 , length.out=1000 ) 
+prior <- rep( 1 , 1000 ) 
+likelihood <- dbinom( 6 , size=9 , prob=p_grid ) 
+posterior <- likelihood * prior 
+posterior <- posterior / sum(posterior) 
+set.seed(100) 
+samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE )
+sum( samples > 0.8 ) / 1e4 #How much posterior prob lies above p=0.8?
+```
 ## 3E3
-
+```{r}
+p_grid <- seq( from=0 , to=1 , length.out=1000 ) 
+prior <- rep( 1 , 1000 ) 
+likelihood <- dbinom( 6 , size=9 , prob=p_grid ) 
+posterior <- likelihood * prior 
+posterior <- posterior / sum(posterior) 
+set.seed(100) 
+samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE )
+sum( samples >0.2 & samples < 0.8 ) / 1e4 #How much posterior prob lies between p=0.2 & p=0.8?
+```
 ## 3E4
-
+```{r}
+quantile( samples , 0.2 ) #20% of the posterior probability lies below which value of p?
+```
 ## 3E5
-
+```{r}
+quantile( samples , 0.8 ) #20% of the posterior probability lies above which value of p?
+```
 ## 3E6
-
+```{r}
+library(rethinking)
+HPDI( samples , prob=0.66 ) #Which values of p contain the narrowest interval equal to 66% of the posterior probability?
+```
 ## 3E7
-
+```{r}
+PI( samples , prob=0.66 ) #Which values of p contain 66% of the posterior probability, assuming equal posterior probability both below and above the interval?
+```
 ## 3M1
-
+```{r}
+p_grid <- seq( from=0 , to=1 , length.out=1000 ) 
+prior <- rep( 1 , 1000 ) 
+likelihood <- dbinom( 8 , size=15 , prob=p_grid ) 
+posterior <- likelihood * prior 
+posterior <- posterior / sum(posterior) 
+set.seed(100) 
+samples <- sample( p_grid , prob=posterior , size=1e4 , replace=TRUE )
+hist(samples)
+```
 ## 3M2
-
-_STOP AFTER 3M2 FOR 02/25 ASSIGNMENT_
+```{r}
+samples2 <- sample( p_grid , prob=posterior , size=10000 , replace=TRUE)
+HPDI( samples2 , prob=0.90 )
+hist(samples2)
+abline(v=HPDI(samples2, prob=0.90)[1], col="blue", lwd=2.5)
+abline(v=HPDI(samples2, prob=0.90)[2], col="blue", lwd=2.5)
+```
 
 ## 3M3
 
