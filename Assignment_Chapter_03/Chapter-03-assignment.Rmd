@@ -86,13 +86,12 @@ simplehist(dummy_w, xlab="dummy data water")
 The probability of observing 8 water in 15 tosses is 14.6%.
 ## 3M4
 ```{r}
-
 p_grid <- seq( from=0 , to=1 , length.out=1000 ) 
 prior <- rep( 1 , 1000 ) 
+dummy_prob <- (dummy_w)/1e5
 likelihood <- dbinom( 6 , size=9 , prob=dummy_prob ) 
 posterior <- likelihood * prior 
 posterior <- posterior / sum(posterior) 
-likelihood
 plot(posterior, dummy_prob)
 
 ```
@@ -117,10 +116,11 @@ simplehist(dummy_w, xlab="dummy data water")
 ```
 Now the probability of 8 water in 15 tosses is greater (15.8%) 
 ## 3H1
+
+```{r}
 library(rethinking) 
 data(homeworkch3)
 sum(birth1) + sum(birth2)
-```{r}
 p_grid <- seq( from=0 , to=1 , length.out=1000 )
 likelihood <- dbinom(111, size=200, prob=p_grid)
 posterior <- likelihood * prior 
