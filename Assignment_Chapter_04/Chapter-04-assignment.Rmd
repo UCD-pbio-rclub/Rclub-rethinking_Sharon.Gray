@@ -20,6 +20,7 @@ The posterior distribution includes 2 parameters: the mean (mu) and the standard
 Pr(mu, sigma | y)= Normal(yi|mu, sigma)Normal(mu|0,10)Uniform(sigma|0,10)/
 (integral(Normal(hi|mu, sigma)Normal(mu|0,10)Uniform(sigma|0,10)))d(mu)d(sigma)
 
+
 ## 4M1
 ```{r}
 library(rethinking)
@@ -45,22 +46,126 @@ precis( m4.1 )
 ```
 # For 03/24/16
 
-## 4E4
+##4E4
+line 2
 
-## 4E5
+##4E5
+three parameters: alpha and beta and sigma
 
 ## 4M3
-
+yi ~ Normal(mui, sigma)
+mui = alpha + beta*xi
+alpha ~ Normal(0, 50)
+beta ~uniform(0,10)
+sigma ~ uniform(0,50)
 ## 4M4
+hi ~ Normal(mui, sigma)
+mui = alpha + beta*xi
+alpha ~ Normal(147, 50)
+beta ~uniform(6,12)
+sigma ~ uniform(0,50)
 
 ## 4M5
-
+I already am using a positive value of beta to represent growth (height increase every year), so I don't need to change that, but I would change my mean value of alpha (the intercept) to 120.
 ## 4M6
-
+I would change the sigma estimate to 
+sigma ~ uniform(64,0)
+This would assume that the variance is always 64, which is conservative since it may at times be smaller.
+I would also change the alpha estimate to 
+alpha ~Normal(120,64) so that, even at time=0 the sigma value of 64 is observed.
 # For 03/31/16
 
 ## 4H1
-
+```{r}
+library(rethinking) 
+  data(Howell1) 
+  d <- Howell1 
+  str(d)
+ m4.3 <- map( 
+  alist(
+  height ~ dnorm( mu , sigma ) , 
+  mu <- a + b*weight , 
+  a ~ dnorm( 156 , 100 ) , 
+  b ~ dnorm( 0 , 10 ) , 
+  sigma ~ dunif( 0 , 50 )
+), 
+data=d )
+precis(m4.3, corr=TRUE) 
+post <- extract.samples( m4.3 )
+#46.95
+  mu_at_46.95 <- post$a + post$b * 46.95
+  dens( mu_at_46.95 , col=rangi2 , lwd=2 , xlab="mu|weight=46.95" )
+  HPDI(mu_at_46.95, prob=0.89)
+  weight.seq <- 46.95
+  mu <- link( m4.3 , data=data.frame(weight=weight.seq) ) 
+  str(mu)
+  mu.mean <- apply( mu , 2 , mean ) 
+  mu.mean
+ #43.72 
+ mu_at_43.72 <- post$a + post$b * 43.72
+  dens( mu_at_43.72 , col=rangi2 , lwd=2 , xlab="mu|weight=43.72" )
+  HPDI(mu_at_43.72, prob=0.89)
+  weight.seq <- 43.72
+  mu <- link( m4.3 , data=data.frame(weight=weight.seq) ) 
+  str(mu)
+  mu.mean <- apply( mu , 2 , mean ) 
+  mu.mean
+  #64.78 
+ mu_at_64.78 <- post$a + post$b * 64.78
+  dens( mu_at_64.78 , col=rangi2 , lwd=2 , xlab="mu|weight=64.78" )
+  HPDI(mu_at_64.78, prob=0.89)
+  weight.seq <- 64.78
+  mu <- link( m4.3 , data=data.frame(weight=weight.seq) ) 
+  str(mu)
+  mu.mean <- apply( mu , 2 , mean ) 
+  mu.mean
+  
+   #32.59 
+ mu_at_32.59 <- post$a + post$b * 32.59
+  dens( mu_at_32.59 , col=rangi2 , lwd=2 , xlab="mu|weight=32.59" )
+  HPDI(mu_at_32.59, prob=0.89)
+  weight.seq <- 32.59
+  mu <- link( m4.3 , data=data.frame(weight=weight.seq) ) 
+  str(mu)
+  mu.mean <- apply( mu , 2 , mean ) 
+  mu.mean
+  
+  #54.63 
+ mu_at_54.63 <- post$a + post$b * 54.63
+  dens( mu_at_54.63 , col=rangi2 , lwd=2 , xlab="mu|weight=54.63" )
+  HPDI(mu_at_54.63, prob=0.89)
+  weight.seq <- 54.63
+  mu <- link( m4.3 , data=data.frame(weight=weight.seq) ) 
+  str(mu)
+  mu.mean <- apply( mu , 2 , mean ) 
+  mu.mean
+  
+```
+observation	weight	expected height	89% HPDI
+1	46.95	158.2674	157.5-159.1
+2	43.72	152.5759	151.86-153.33
+3	64.78	189.6565	188.34-191.22
+4	32.59	132.9472	132.27-133.57
+5	54.63	171.8163	170.67-172.88
 ## 4H2
-
+```{r}
+library(rethinking) 
+  data(Howell1) 
+  d2 <- d[ d$age < 18 , ] 
+  str(d2)
+  m4.3 <- map( 
+  alist(
+  height ~ dnorm( mu , sigma ) , 
+  mu <- a + b*weight , 
+  a ~ dnorm( 156 , 100 ) , 
+  b ~ dnorm( 0 , 10 ) , 
+  sigma ~ dunif( 0 , 50 )
+), 
+data=d2 )
+precis(m4.3, corr=TRUE)
+```
+ 
+ 
+  Ran out of time to finish this...
+  
 ## 4H3
