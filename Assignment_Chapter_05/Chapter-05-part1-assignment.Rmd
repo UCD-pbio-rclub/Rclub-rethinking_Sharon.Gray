@@ -1,16 +1,57 @@
+---
+output: 
+  html_document: 
+    fig_caption: yes
+    keep_md: yes
+---
 # Statistical Rethinking Chapter 4 problems
 
-__Name:__
+__Name:__Sharon Gray
 
 
 # For 04/11/2016
 
 ## 5E1
+2, 3 and 4 are multiple linear regressions.
+
 
 ## 5E2
+mu <- a + b1*p.diversity + b2*latitude
+
 
 ## 5M1
+plant_growth_rate <- a + b1*CO2 + b2*talking_to_plants 
+
 
 ## 5M3
+When the divorce rate is high, more people will have multiple marriages in their lifetime, resulting in a higher marriage rate. We could evaluate this using predictor residual plots.  
+
 
 ## 5M4
+```{r}
+setwd("/Users/sharongray/Rclub-rethinking_Sharon.Gray/Assignment_Chapter_05")
+LDS <- read.csv("LDS.csv")
+library(rethinking)
+data(WaffleDivorce)
+LDS_marriage <-cbind(LDS, WaffleDivorce)
+head(LDS_marriage)
+#standardize variables
+LDS_marriage$Marriage.s <- (LDS_marriage$Marriage - mean(LDS_marriage$Marriage))/sd(LDS_marriage$Marriage)
+LDS_marriage$MedianAgeMarriage.s <- (LDS_marriage$MedianAgeMarriage - mean(LDS_marriage$MedianAgeMarriage))/sd(LDS_marriage$MedianAgeMarriage)
+LDS_marriage$percent_LDS.s <- (LDS_marriage$percent_LDS - mean(LDS_marriage$percent_LDS))/sd(LDS_marriage$percent_LDS)
+
+model_LDS <- map(
+    alist(
+      Divorce ~ dnorm(mu, sigma),
+      mu <- a + bR*Marriage.s + bA*MedianAgeMarriage.s + bL*percent_LDS.s,
+      a ~ dnorm(10, 10),
+      bR ~ dnorm(0, 1),
+      bA ~ dnorm(0,1),
+      bL ~ dnorm(0,1),
+      sigma ~ dunif(0,10)
+    ) ,
+    data = LDS_marriage)
+precis(model_LDS)
+plot(precis(model_LDS))
+    ```
+    
