@@ -124,9 +124,77 @@ lines( np.seq , mu.PI[2,] , lty=2 )</code></pre>
 </div>
 <div id="h2" class="section level2">
 <h2>5H2</h2>
-<p>``` {r} library(rethinking) data(foxes) m5H2 &lt;- map( alist( weight ~ dnorm( mu , sigma ) , mu &lt;- a + ba<em>area + bg</em>groupsize , a ~ dnorm( 5 , 1 ) , ba ~ dnorm( 0 , 1 ) , bg ~ dnorm( 0 , 1 ) , sigma ~ dunif( 0 , 1 ) ), data=foxes) precis(m5H2)</p>
-<p>mean.group.size &lt;- mean(groupsize) np.seq &lt;- 0:100 pred.data &lt;- data.frame( weight=np.seq, groupsize=mean.group.size) mu &lt;- link( m5H2 , data=pred.data , n=1e4 ) mu.mean &lt;- apply( mu , 2 , mean ) mu.PI &lt;- apply( mu , 2 , PI ) plot( weight ~ area , data=foxes , type=“n” ) lines( np.seq , mu.mean ) lines( np.seq , mu.PI[1,] , lty=2 ) lines( np.seq , mu.PI[2,] , lty=2 )</p>
-<p>mean.area &lt;- mean(area) np.seq &lt;- 0:100 pred.data &lt;- data.frame( weight=np.seq, area=mean.area) mu &lt;- link( m5H2 , data=pred.data , n=1e4 ) mu.mean &lt;- apply( mu , 2 , mean ) mu.PI &lt;- apply( mu , 2 , PI ) plot( weight ~ groupsize , data=foxes , type=“n” ) lines( np.seq , mu.mean ) lines( np.seq , mu.PI[1,] , lty=2 ) lines( np.seq , mu.PI[2,] , lty=2 ) ## 5H3</p>
+<pre><code>{r}
+library(rethinking)
+data(foxes)
+m5H2 &lt;- map( alist(
+  weight ~ dnorm( mu , sigma ) , 
+  mu &lt;- a + ba*area + bg*groupsize , 
+  a ~ dnorm( 10 , 10 ) , 
+  ba ~ dnorm( 0 , 1 ) , 
+  bg ~ dnorm( 0 , 1 ) , 
+  sigma ~ dunif( 0 , 10 )
+), 
+data=foxes)
+precis(m5H2)
+plot(precis(m5H2))
+mean.group.size &lt;- mean(foxes$groupsize)
+np.seq &lt;- 0:100 
+pred.data &lt;- data.frame( area=np.seq, groupsize=mean.group.size)
+mu &lt;- link( m5H2 , data=pred.data , n=1e4 ) 
+mu.mean &lt;- apply( mu , 2 , mean ) 
+mu.PI &lt;- apply( mu , 2 , PI )
+plot( weight ~ area , data=foxes , type=&quot;n&quot; ) 
+lines( np.seq , mu.mean ) 
+lines( np.seq , mu.PI[1,] , lty=2 ) 
+lines( np.seq , mu.PI[2,] , lty=2 )
+
+mean.area &lt;- mean(foxes$area)
+np.seq &lt;- 0:100 
+pred.data.2 &lt;- data.frame( groupsize=np.seq, area=mean.area)
+mu &lt;- link( m5H2 , data=pred.data.2 , n=1e4 ) 
+mu.mean &lt;- apply( mu , 2 , mean ) 
+mu.PI &lt;- apply( mu , 2 , PI )
+plot( weight ~ groupsize , data=foxes , type=&quot;n&quot; ) 
+lines( np.seq , mu.mean ) 
+lines( np.seq , mu.PI[1,] , lty=2 ) 
+lines( np.seq , mu.PI[2,] , lty=2 )</code></pre>
+</div>
+<div id="h3" class="section level2">
+<h2>5H3</h2>
+<pre><code>{r}
+library(rethinking)
+data(foxes)
+m5H3 &lt;- map( alist(
+  weight ~ dnorm( mu , sigma ) , 
+  mu &lt;- a + ba*avgfood + bg*groupsize , 
+  a ~ dnorm( 10 , 10 ) , 
+  ba ~ dnorm( 0 , 1 ) , 
+  bg ~ dnorm( 0 , 1 ) , 
+  sigma ~ dunif( 0 , 10 )
+), 
+data=foxes)
+precis(m5H3)
+plot(precis(m5H3))
+
+#now with all 3
+
+m5H3 &lt;- map( alist(
+  weight ~ dnorm( mu , sigma ) , 
+  mu &lt;- a + bf*avgfood + bg*groupsize + ba*area , 
+  a ~ dnorm( 10 , 10 ) , 
+  ba ~ dnorm( 0 , 1 ) , 
+  bg ~ dnorm( 0 , 1 ) , 
+  bf ~ dnorm( 0, 1),
+  sigma ~ dunif( 0 , 10 )
+), 
+data=foxes)
+precis(m5H3)
+plot(precis(m5H3))</code></pre>
+<p>area is a better predictor since CI does not cross zero. Average food and area are probably positively correlated, as more area should contain more food. They are correlated, with a r value of 0.88</p>
+<pre><code>{r}
+cor(foxes$avgfood, foxes$area)
+plot(foxes$avgfood, foxes$area)</code></pre>
 </div>
 </div>
 
