@@ -28,18 +28,23 @@ When the divorce rate is high, more people will have multiple marriages in their
 
 
 ## 5M4
+merge is better than cbind because you can use by statements to make sure it lines up
 ```{r}
 setwd("/Users/sharongray/Rclub-rethinking_Sharon.Gray/Assignment_Chapter_05")
 LDS <- read.csv("LDS.csv")
 library(rethinking)
 data(WaffleDivorce)
-LDS_marriage <-cbind(LDS, WaffleDivorce)
+LDS_marriage <- merge(LDS, WaffleDivorce, by.x="Location", by.y="Location")
+#LDS_marriage <-cbind(LDS, WaffleDivorce)
 head(LDS_marriage)
 #standardize variables
 LDS_marriage$Marriage.s <- (LDS_marriage$Marriage - mean(LDS_marriage$Marriage))/sd(LDS_marriage$Marriage)
 LDS_marriage$MedianAgeMarriage.s <- (LDS_marriage$MedianAgeMarriage - mean(LDS_marriage$MedianAgeMarriage))/sd(LDS_marriage$MedianAgeMarriage)
 LDS_marriage$percent_LDS.s <- (LDS_marriage$percent_LDS - mean(LDS_marriage$percent_LDS))/sd(LDS_marriage$percent_LDS)
-
+#model where divorce is predicted by marriage rate, median marriage age, and percent LDS
+#each beta is normally distributed with a mean of 0 and SD of 1
+#the intercept is normally distributed with a mean of 10 and SD of 10
+#sigma is uniformly distributed
 model_LDS <- map(
     alist(
       Divorce ~ dnorm(mu, sigma),
@@ -54,4 +59,5 @@ model_LDS <- map(
 precis(model_LDS)
 plot(precis(model_LDS))
     ```
+    head(LDS)
     

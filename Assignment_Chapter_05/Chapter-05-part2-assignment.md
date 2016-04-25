@@ -1,10 +1,4 @@
----
-title: "Chapter-05-part2-assignment"
-output: 
-  html_document: 
-    fig_caption: yes
-    keep_md: yes
----
+# Chapter-05-part2-assignment
 # Statistical Rethinking Chapter 4 problems
 
 __Name:__Sharon Gray

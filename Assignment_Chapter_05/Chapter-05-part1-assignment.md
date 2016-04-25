@@ -22,6 +22,7 @@ When the divorce rate is high, more people will have multiple marriages in their
 
 
 ## 5M4
+merge is better than cbind because you can use by statements to make sure it lines up
 
 ```r
 setwd("/Users/sharongray/Rclub-rethinking_Sharon.Gray/Assignment_Chapter_05")
@@ -56,18 +57,19 @@ library(rethinking)
 
 ```r
 data(WaffleDivorce)
-LDS_marriage <-cbind(LDS, WaffleDivorce)
+LDS_marriage <- merge(LDS, WaffleDivorce, by.x="Location", by.y="Location")
+#LDS_marriage <-cbind(LDS, WaffleDivorce)
 head(LDS_marriage)
 ```
 
 ```
-##     Location Membership Population percent_LDS   Location Loc Population
-## 1    Alabama      36547    4849377      0.0075    Alabama  AL       4.78
-## 2     Alaska      33375     736732      0.0453     Alaska  AK       0.71
-## 3    Arizona     416192    6731484      0.0618    Arizona  AZ       6.33
-## 4   Arkansas      29898    2966369      0.0100   Arkansas  AR       2.92
-## 5 California     778629   38802500      0.0201 California  CA      37.25
-## 6   Colorado     151523    5355866      0.0282   Colorado  CO       5.03
+##     Location Membership Population.x percent_LDS Loc Population.y
+## 1    Alabama      36547      4849377      0.0075  AL         4.78
+## 2     Alaska      33375       736732      0.0453  AK         0.71
+## 3    Arizona     416192      6731484      0.0618  AZ         6.33
+## 4   Arkansas      29898      2966369      0.0100  AR         2.92
+## 5 California     778629     38802500      0.0201  CA        37.25
+## 6   Colorado     151523      5355866      0.0282  CO         5.03
 ##   MedianAgeMarriage Marriage Marriage.SE Divorce Divorce.SE WaffleHouses
 ## 1              25.3     20.2        1.27    12.7       0.79          128
 ## 2              25.2     26.0        2.93    12.5       2.05            0
@@ -89,7 +91,10 @@ head(LDS_marriage)
 LDS_marriage$Marriage.s <- (LDS_marriage$Marriage - mean(LDS_marriage$Marriage))/sd(LDS_marriage$Marriage)
 LDS_marriage$MedianAgeMarriage.s <- (LDS_marriage$MedianAgeMarriage - mean(LDS_marriage$MedianAgeMarriage))/sd(LDS_marriage$MedianAgeMarriage)
 LDS_marriage$percent_LDS.s <- (LDS_marriage$percent_LDS - mean(LDS_marriage$percent_LDS))/sd(LDS_marriage$percent_LDS)
-
+#model where divorce is predicted by marriage rate, median marriage age, and percent LDS
+#each beta is normally distributed with a mean of 0 and SD of 1
+#the intercept is normally distributed with a mean of 10 and SD of 10
+#sigma is uniformly distributed
 model_LDS <- map(
     alist(
       Divorce ~ dnorm(mu, sigma),
@@ -106,11 +111,11 @@ precis(model_LDS)
 
 ```
 ##        Mean StdDev  5.5% 94.5%
-## a      9.69   0.20  9.37 10.01
-## bR     0.00   0.30 -0.47  0.47
-## bA    -1.13   0.28 -1.57 -0.69
-## bL    -0.28   0.22 -0.64  0.08
-## sigma  1.42   0.14  1.19  1.64
+## a      9.76   0.19  9.45 10.07
+## bR     0.03   0.29 -0.43  0.49
+## bA    -1.21   0.29 -1.66 -0.75
+## bL    -0.59   0.23 -0.95 -0.23
+## sigma  1.35   0.14  1.13  1.57
 ```
 
 ```r
@@ -118,4 +123,5 @@ plot(precis(model_LDS))
 ```
 
 ![](Chapter-05-part1-assignment_files/figure-html/unnamed-chunk-1-1.png) 
+    head(LDS)
     
