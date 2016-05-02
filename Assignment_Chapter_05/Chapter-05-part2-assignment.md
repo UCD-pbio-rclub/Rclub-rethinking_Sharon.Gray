@@ -136,3 +136,51 @@ Average food and area are probably positively correlated, as more area should co
 cor(foxes$avgfood, foxes$area)
 plot(foxes$avgfood, foxes$area)
 ```
+
+#for May 2, 2016
+
+
+#5E3
+b1=slope parameter for funding 
+b2=slope parameter for lab size
+
+time ~ dnorm( mu , sigma ) , 
+  mu <- a + b1*funding + b2*size  , 
+  a ~ dnorm( 6 , 6 ) , 
+  b1 ~ dnorm( 0 , 1 ) , 
+  b2 ~ dnorm( 0 , 1 ) , 
+  sigma ~ dunif( 0 , 10 )
+  
+IN the multiple regression model, b1 and b2 would both be positive. If either were evaluated in a single regression, there slopes would not be significantly different from zero.
+
+
+#5E4
+1 and 3
+
+
+#5M5
+#here I would expect b1 to be negative
+obesity ~ dnorm( mu , sigma ) , 
+  mu <- a + b1*gasprice   , 
+  a ~ dnorm( 6 , 6 ) , 
+  b1 ~ dnorm( 0 , 1 ) , 
+  b2 ~ dnorm( 0 , 1 ) , 
+  sigma ~ dunif( 0 , 10 )
+
+
+#here i would expect b1 to be negative  
+obesity ~ dnorm( mu , sigma ) , 
+  mu <- a + b1*walking   , 
+  a ~ dnorm( 6 , 6 ) , 
+  b1 ~ dnorm( 0 , 1 ) , 
+  b2 ~ dnorm( 0 , 1 ) , 
+  sigma ~ dunif( 0 , 10 )
+
+#here i would expect b2 to be positive 
+obesity ~ dnorm( mu , sigma ) , 
+  mu <- a + b2*restaurant.meals   , 
+  a ~ dnorm( 6 , 6 ) , 
+  b1 ~ dnorm( 0 , 1 ) , 
+  b2 ~ dnorm( 0 , 1 ) , 
+  sigma ~ dunif( 0 , 10 )
+  
