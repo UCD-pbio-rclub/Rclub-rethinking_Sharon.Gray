@@ -190,3 +190,4 @@ obesity ~ dnorm( mu , sigma ) ,
   b2 ~ dnorm( 0 , 1 ) , 
   sigma ~ dunif( 0 , 10 )
   
+

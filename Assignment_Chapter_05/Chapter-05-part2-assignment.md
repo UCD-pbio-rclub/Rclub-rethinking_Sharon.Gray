@@ -184,3 +184,10 @@ obesity ~ dnorm( mu , sigma ) ,
   b2 ~ dnorm( 0 , 1 ) , 
   sigma ~ dunif( 0 , 10 )
   
+m5.16_alt <- map( alist(
+kcal.per.g ~ dnorm( mu , sigma ) , 
+mu <- a[clade_id] ,
+a[clade_id] ~ dnorm( 0.6 , 10 ) , 
+sigma ~ dunif( 0 , 10 )
+), data=d )
+precis( m5.16_alt )
